@@ -86,25 +86,19 @@ steps:
     args:
       - -c
       - |
-        gcloud run jobs update news-fetcher \
-          --image=${_REGISTRY}/news-fetcher:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID} \
-        || \
-        gcloud run jobs create news-fetcher \
-          --image=${_REGISTRY}/news-fetcher:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID}
+        ARGS="--image=${_REGISTRY}/news-fetcher:${COMMIT_SHA}
+          --region=${_REGION}
+          --service-account=${_SA_EMAIL}
+          --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
+          --set-secrets=ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --memory=2Gi
+          --task-timeout=1800
+          --project=${PROJECT_ID}"
+        if gcloud run jobs describe news-fetcher --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
+          gcloud run jobs update news-fetcher $ARGS
+        else
+          gcloud run jobs create news-fetcher $ARGS
+        fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     id: deploy-processor
@@ -113,25 +107,19 @@ steps:
     args:
       - -c
       - |
-        gcloud run jobs update news-processor \
-          --image=${_REGISTRY}/news-processor:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID} \
-        || \
-        gcloud run jobs create news-processor \
-          --image=${_REGISTRY}/news-processor:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID}
+        ARGS="--image=${_REGISTRY}/news-processor:${COMMIT_SHA}
+          --region=${_REGION}
+          --service-account=${_SA_EMAIL}
+          --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
+          --set-secrets=ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --memory=2Gi
+          --task-timeout=1800
+          --project=${PROJECT_ID}"
+        if gcloud run jobs describe news-processor --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
+          gcloud run jobs update news-processor $ARGS
+        else
+          gcloud run jobs create news-processor $ARGS
+        fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     id: deploy-notifier
@@ -140,25 +128,19 @@ steps:
     args:
       - -c
       - |
-        gcloud run jobs update news-notifier \
-          --image=${_REGISTRY}/news-notifier:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID} \
-        || \
-        gcloud run jobs create news-notifier \
-          --image=${_REGISTRY}/news-notifier:${COMMIT_SHA} \
-          --region=${_REGION} \
-          --service-account=${_SA_EMAIL} \
-          --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-          --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
-          --memory=2Gi \
-          --task-timeout=1800 \
-          --project=${PROJECT_ID}
+        ARGS="--image=${_REGISTRY}/news-notifier:${COMMIT_SHA}
+          --region=${_REGION}
+          --service-account=${_SA_EMAIL}
+          --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
+          --set-secrets=ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --memory=2Gi
+          --task-timeout=1800
+          --project=${PROJECT_ID}"
+        if gcloud run jobs describe news-notifier --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
+          gcloud run jobs update news-notifier $ARGS
+        else
+          gcloud run jobs create news-notifier $ARGS
+        fi
 
 images:
   - ${_REGISTRY}/news-fetcher:${COMMIT_SHA}
