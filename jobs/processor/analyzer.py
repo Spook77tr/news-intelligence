@@ -5,7 +5,7 @@ sys.path.insert(0, "/app/config")
 import google.generativeai as genai
 from prompts import SYSTEM_PROMPT, NEWS_ANALYSIS_SCHEMA
 
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+genai.configure(api_key=os.environ["VERTEXAI_API_KEY"])
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash-002")
 
