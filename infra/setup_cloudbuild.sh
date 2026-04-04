@@ -1,9 +1,10 @@
 #!/bin/bash
 # One-time setup: Cloud Build permissions + trigger.
 #
-# Prerequisites (must be done in GCP Console FIRST):
-#   Console → Cloud Build → Repositories (2nd gen)
-#   → Connect Repository → GitHub → Authorize → select Spook77tr/news-intelligence
+# Prerequisites (must be done in GitHub FIRST):
+#   Install the Cloud Build GitHub App on the repo:
+#   https://github.com/apps/google-cloud-build
+#   → Install → select Spook77tr/news-intelligence → Save
 #
 # Usage:
 #   export GCP_PROJECT_ID=bi4ward
@@ -43,6 +44,24 @@ for ROLE in \
   roles/logging.logWriter; do
   gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${CLOUDBUILD_SA}" \
+    --role="$ROLE" \
+    --condition=None \
+    --quiet
+  echo "  ✓ $ROLE"
+done
+
+# Grant news-sa the same roles (used as trigger SA in Console)
+echo ""
+echo "--- Granting IAM roles to news-sa (trigger SA) ---"
+for ROLE in \
+  roles/run.developer \
+  roles/iam.serviceAccountUser \
+  roles/artifactregistry.writer \
+  roles/secretmanager.secretAccessor \
+  roles/logging.logWriter \
+  roles/storage.objectAdmin; do
+  gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SA_EMAIL}" \
     --role="$ROLE" \
     --condition=None \
     --quiet
