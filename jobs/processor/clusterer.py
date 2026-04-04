@@ -7,7 +7,7 @@ import os
 
 vertexai.init(project=os.environ["GCP_PROJECT_ID"], location="europe-west1")
 
-SIMILARITY_THRESHOLD = float(os.environ.get("CLUSTER_THRESHOLD", "0.82"))
+SIMILARITY_THRESHOLD = float(os.environ.get("CLUSTER_THRESHOLD", "0.75"))
 MIN_SOURCES_PER_CLUSTER = int(os.environ.get("MIN_CLUSTER_SOURCES", "2"))
 
 
@@ -30,6 +30,8 @@ def cluster_articles(articles: list[dict]) -> list[list[dict]]:
     print(f"[INFO] Embedding {len(titles)} titles...")
     embeddings = embed_titles(titles)
     sim_matrix = cosine_similarity(embeddings)
+    np.fill_diagonal(sim_matrix, 0)  # exclude self-similarity
+    print(f"[INFO] Similarity — max: {sim_matrix.max():.3f}, mean: {sim_matrix.mean():.3f}, threshold: {SIMILARITY_THRESHOLD}")
 
     clusters = []
     assigned = set()

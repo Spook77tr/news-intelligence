@@ -113,7 +113,7 @@ GOOGLE_APPLICATION_CREDENTIALS=  # local dev için, Cloud Run'da SA ile otomatik
 
 ## Clustering Logic
 - Vertex AI text-embedding-004 ile başlık embedding
-- Cosine similarity threshold: 0.82
+- Cosine similarity threshold: 0.75 (override: CLUSTER_THRESHOLD env var)
 - Minimum 2 farklı kaynak = geçerli cluster
 - Tek kaynaktan gelen haberler → skip (gürültü)
 
