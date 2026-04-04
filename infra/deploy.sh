@@ -29,7 +29,7 @@ deploy_job() {
     --region=$REGION \
     --service-account=$SA_EMAIL \
     --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-    --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
+    --set-secrets="TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
     --memory=2Gi \
     --task-timeout=1800 \
     --project=$PROJECT_ID 2>/dev/null || \
@@ -38,7 +38,7 @@ deploy_job() {
     --region=$REGION \
     --service-account=$SA_EMAIL \
     --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence" \
-    --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
+    --set-secrets="TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
     --memory=2Gi \
     --task-timeout=1800 \
     --project=$PROJECT_ID

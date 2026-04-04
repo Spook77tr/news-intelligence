@@ -47,7 +47,7 @@ Her haber kümesini analiz ederken:
    - Olasılık: low / medium / high (sayı değil)
 
 KURALLAR:
-- Yanıtı SADECE tool_use ile ver, başka metin ekleme
+- Yanıtı SADECE geçerli JSON olarak ver, başka metin ekleme
 - Etkilenen varlıkları uydurma, metinden çıkar
 - Güvenilirlik skorlarını abartma
 """
@@ -195,8 +195,5 @@ NEWS_ANALYSIS_SCHEMA = {
     }
 }
 
-ANALYSIS_TOOL = {
-    "name": "news_analysis",
-    "description": "Haber kümesi analiz çıktısı",
-    "input_schema": NEWS_ANALYSIS_SCHEMA
-}
+# Kept for reference — Gemini uses NEWS_ANALYSIS_SCHEMA directly
+# via GenerationConfig(response_schema=NEWS_ANALYSIS_SCHEMA)

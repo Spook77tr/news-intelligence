@@ -8,7 +8,7 @@ Sabah haber brifing sistemi. Farklı kaynaklardan (bias spread ile) haber çekip
 - **Cloud Scheduler** — 05:30 TR saati trigger
 - **BigQuery** — raw_news, news_clusters, analyzed_news
 - **Vertex AI** — text-embedding-004 (clustering)
-- **Claude API (Anthropic)** — haber analizi (tool_use ile structured JSON)
+- **Vertex AI Gemini** — haber analizi (gemini-2.0-flash, response_schema ile structured JSON)
 - **Telegram Bot** — sabah brifing delivery
 
 ## GCP Project
@@ -84,7 +84,6 @@ bash infra/deploy.sh fetcher
 ```
 GCP_PROJECT_ID=
 BQ_DATASET=news_intelligence
-ANTHROPIC_API_KEY=
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
 GOOGLE_APPLICATION_CREDENTIALS=  # local dev için, Cloud Run'da SA ile otomatik
@@ -118,11 +117,11 @@ GOOGLE_APPLICATION_CREDENTIALS=  # local dev için, Cloud Run'da SA ile otomatik
 - Minimum 2 farklı kaynak = geçerli cluster
 - Tek kaynaktan gelen haberler → skip (gürültü)
 
-## Analysis — Claude API
-- Model: claude-sonnet-4-5 (kalite/maliyet dengesi)
-- Structured output: tool_use zorunlu (JSON garantisi)
-- Tool name: `news_analysis`
+## Analysis — Vertex AI Gemini
+- Model: gemini-2.0-flash-001 (override: GEMINI_MODEL env var)
+- Structured output: GenerationConfig(response_mime_type="application/json", response_schema=...)
 - Schema: config/prompts.py içinde NEWS_ANALYSIS_SCHEMA
+- No external API key — same SA credentials as the rest of the pipeline
 
 ## Signal Labels
 - `noise` → Telegram'a gönderilmez

@@ -1,13 +1,17 @@
-import sys
+import sys, json, os
 sys.path.insert(0, "/app/shared")
 sys.path.insert(0, "/app/config")
 
-import os
-import anthropic
-from prompts import SYSTEM_PROMPT, ANALYSIS_TOOL
+import vertexai
+from vertexai.generative_models import GenerativeModel, GenerationConfig
+from prompts import SYSTEM_PROMPT, NEWS_ANALYSIS_SCHEMA
 
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-MODEL = os.environ.get("CLAUDE_MODEL", "claude-sonnet-4-5")
+vertexai.init(
+    project=os.environ["GCP_PROJECT_ID"],
+    location=os.environ.get("VERTEX_REGION", "europe-west1"),
+)
+
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-001")
 
 
 def format_articles_for_prompt(articles: list[dict]) -> str:
@@ -32,28 +36,19 @@ def analyze_cluster(cluster_record: dict, articles: list[dict]) -> dict | None:
     )
 
     try:
-        response = client.messages.create(
-            model=MODEL,
-            max_tokens=2000,
-            system=SYSTEM_PROMPT,
-            tools=[ANALYSIS_TOOL],
-            tool_choice={"type": "tool", "name": "news_analysis"},
-            messages=[{"role": "user", "content": prompt}]
+        model = GenerativeModel(MODEL, system_instruction=SYSTEM_PROMPT)
+        response = model.generate_content(
+            prompt,
+            generation_config=GenerationConfig(
+                response_mime_type="application/json",
+                response_schema=NEWS_ANALYSIS_SCHEMA,
+                temperature=0.3,
+                max_output_tokens=2048,
+            ),
         )
-
-        # tool_use garantili
-        tool_block = next(
-            (b for b in response.content if b.type == "tool_use"),
-            None
-        )
-        if not tool_block:
-            print(f"[WARN] No tool_use block for cluster {cluster_record['cluster_id']}")
-            return None
-
-        return tool_block.input
-
-    except anthropic.APIError as e:
-        print(f"[ERROR] Claude API error for cluster {cluster_record['cluster_id']}: {e}")
+        return json.loads(response.text)
+    except Exception as e:
+        print(f"[ERROR] Gemini API error for cluster {cluster_record['cluster_id']}: {e}")
         return None
 
 
