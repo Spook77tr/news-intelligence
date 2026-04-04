@@ -1,8 +1,8 @@
 FROM python:3.12-slim
 WORKDIR /app
-COPY jobs/fetcher/requirements.txt .
+COPY jobs/processor/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY shared ./shared
 COPY config ./config
-COPY jobs/fetcher ./jobs/fetcher
-CMD ["python", "jobs/fetcher/main.py"]
+COPY jobs/processor ./jobs/processor
+CMD ["python", "jobs/processor/main.py"]

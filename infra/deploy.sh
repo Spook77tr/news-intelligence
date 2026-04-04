@@ -4,7 +4,7 @@ set -e
 PROJECT_ID=${GCP_PROJECT_ID:?GCP_PROJECT_ID not set}
 REGION="europe-west1"
 SA_EMAIL="news-sa@${PROJECT_ID}.iam.gserviceaccount.com"
-REGISTRY="gcr.io/${PROJECT_ID}"
+REGISTRY="${REGION}-docker.pkg.dev/${PROJECT_ID}/news-intelligence"
 
 JOBS=(fetcher processor notifier)
 TARGET=${1:-all}  # bash infra/deploy.sh fetcher → sadece fetcher
@@ -14,6 +14,7 @@ deploy_job() {
   IMAGE="${REGISTRY}/news-${JOB}:latest"
 
   echo "=== Building ${JOB} ==="
+  gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
   docker build \
     -f jobs/${JOB}/Dockerfile \
     -t $IMAGE \

@@ -1,0 +1,108 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "jobs/**"
+      - "shared/**"
+      - "config/**"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "jobs/**"
+      - "shared/**"
+      - "config/**"
+
+env:
+  REGION: europe-west1
+  REGISTRY: europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/news-intelligence
+
+jobs:
+  build:
+    name: Build & Push (${{ matrix.job }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for Workload Identity Federation
+
+    strategy:
+      fail-fast: false
+      matrix:
+        job: [fetcher, processor, notifier]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build & push image
+        run: |
+          IMAGE=${{ env.REGISTRY }}/news-${{ matrix.job }}
+          docker build \
+            -f jobs/${{ matrix.job }}/Dockerfile \
+            -t ${IMAGE}:${{ github.sha }} \
+            -t ${IMAGE}:latest \
+            .
+          docker push ${IMAGE}:${{ github.sha }}
+          docker push ${IMAGE}:latest
+
+  deploy:
+    name: Deploy (${{ matrix.job }})
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      id-token: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        job: [fetcher, processor, notifier]
+
+    steps:
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy Cloud Run Job
+        run: |
+          IMAGE=${{ env.REGISTRY }}/news-${{ matrix.job }}:${{ github.sha }}
+          SA_EMAIL=news-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+
+          gcloud run jobs update news-${{ matrix.job }} \
+            --image="$IMAGE" \
+            --region=${{ env.REGION }} \
+            --service-account="$SA_EMAIL" \
+            --set-env-vars="GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},BQ_DATASET=news_intelligence" \
+            --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
+            --memory=2Gi \
+            --task-timeout=1800 \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+          || \
+          gcloud run jobs create news-${{ matrix.job }} \
+            --image="$IMAGE" \
+            --region=${{ env.REGION }} \
+            --service-account="$SA_EMAIL" \
+            --set-env-vars="GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},BQ_DATASET=news_intelligence" \
+            --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest" \
+            --memory=2Gi \
+            --task-timeout=1800 \
+            --project=${{ secrets.GCP_PROJECT_ID }}

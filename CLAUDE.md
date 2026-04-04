@@ -12,10 +12,10 @@ Sabah haber brifing sistemi. Farklı kaynaklardan (bias spread ile) haber çekip
 - **Telegram Bot** — sabah brifing delivery
 
 ## GCP Project
-- Project ID: `[SET: GCP_PROJECT_ID]`
+- Project ID: `bi4ward`
 - Region: `europe-west1`
 - BQ Dataset: `news_intelligence`
-- Service Account: `news-sa@[PROJECT].iam.gserviceaccount.com`
+- Service Account: `news-sa@bi4ward.iam.gserviceaccount.com`
 
 ## Repo Structure
 ```
@@ -48,12 +48,28 @@ news-intelligence/
 └── .env.example
 ```
 
+## Repo
+https://github.com/Spook77tr/news-intelligence
+
+## CI/CD
+- GitHub Actions → `.github/workflows/deploy.yml`
+- Push to `main` → build + deploy all jobs
+- PR to `main` → build only (no deploy)
+- Auth: Workload Identity Federation (no long-lived keys)
+- Registry: `europe-west1-docker.pkg.dev/bi4ward/news-intelligence`
+- Required GitHub secrets: `GCP_PROJECT_ID`, `GCP_WIF_PROVIDER`, `GCP_SA_EMAIL`
+- WIF setup: `bash infra/setup_wif.sh`
+
 ## Build & Deploy
 ```bash
 # İlk kurulum (tek seferlik)
 bash infra/setup.sh
 
-# Deploy all jobs
+# WIF + Artifact Registry kurulumu (CI/CD için)
+export GITHUB_REPO=Spook77tr/news-intelligence
+bash infra/setup_wif.sh
+
+# Manuel deploy (tüm joblar)
 bash infra/deploy.sh
 
 # Tek job deploy
