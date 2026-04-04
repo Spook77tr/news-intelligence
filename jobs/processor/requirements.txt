@@ -1,0 +1,7 @@
+google-cloud-bigquery==3.25.0
+google-cloud-aiplatform==1.68.0
+anthropic==0.34.2
+scikit-learn==1.5.2
+numpy==1.26.4
+pyyaml==6.0.2
+pydantic==2.9.2

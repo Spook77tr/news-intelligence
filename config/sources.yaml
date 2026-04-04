@@ -1,0 +1,80 @@
+sources:
+  # Türkiye — Sol/Laik
+  - name: Cumhuriyet
+    url: https://www.cumhuriyet.com.tr/rss/son_dakika.xml
+    bias: TR_LEFT
+    language: tr
+    priority: 1
+
+  # Türkiye — Sağ/Hükümet yanlısı
+  - name: Sabah
+    url: https://www.sabah.com.tr/rss/anasayfa.xml
+    bias: TR_RIGHT
+    language: tr
+    priority: 1
+
+  # Türkiye — Ekonomi odaklı
+  - name: Dünya Gazetesi
+    url: https://www.dunya.com/rss
+    bias: TR_ECONOMY
+    language: tr
+    priority: 2
+
+  # Türkiye — Merkez/Liberal
+  - name: Hürriyet
+    url: https://www.hurriyet.com.tr/rss/anasayfa
+    bias: TR_CENTER
+    language: tr
+    priority: 1
+
+  # Uluslararası — Nötr/Wire
+  - name: Reuters
+    url: https://feeds.reuters.com/reuters/topNews
+    bias: INTL_NEUTRAL
+    language: en
+    priority: 1
+
+  - name: Associated Press
+    url: https://feeds.apnews.com/rss/apf-topnews
+    bias: INTL_NEUTRAL
+    language: en
+    priority: 1
+
+  # Uluslararası — Batı/Liberal
+  - name: BBC News
+    url: https://feeds.bbci.co.uk/news/world/rss.xml
+    bias: WEST_LIBERAL
+    language: en
+    priority: 1
+
+  - name: The Guardian
+    url: https://www.theguardian.com/world/rss
+    bias: WEST_LEFT
+    language: en
+    priority: 2
+
+  # Uluslararası — Finans
+  - name: Financial Times
+    url: https://www.ft.com/rss/home
+    bias: WEST_FINANCE
+    language: en
+    priority: 2
+
+  # Orta Doğu perspektifi
+  - name: Al Jazeera English
+    url: https://www.aljazeera.com/xml/rss/all.xml
+    bias: MIDEAST
+    language: en
+    priority: 2
+
+  # Rus perspektifi
+  - name: RT
+    url: https://www.rt.com/rss/news/
+    bias: RU_STATE
+    language: en
+    priority: 3
+
+settings:
+  max_articles_per_source: 20
+  content_snippet_length: 600
+  fetch_timeout_seconds: 30
