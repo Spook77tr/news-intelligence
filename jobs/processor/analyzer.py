@@ -2,14 +2,10 @@ import sys, json, os
 sys.path.insert(0, "/app/shared")
 sys.path.insert(0, "/app/config")
 
-import vertexai
-from vertexai.generative_models import GenerativeModel, GenerationConfig
+import google.generativeai as genai
 from prompts import SYSTEM_PROMPT, NEWS_ANALYSIS_SCHEMA
 
-vertexai.init(
-    project=os.environ["GCP_PROJECT_ID"],
-    location=os.environ.get("VERTEX_REGION", "europe-west1"),
-)
+genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash-002")
 
@@ -36,10 +32,10 @@ def analyze_cluster(cluster_record: dict, articles: list[dict]) -> dict | None:
     )
 
     try:
-        model = GenerativeModel(MODEL, system_instruction=SYSTEM_PROMPT)
+        model = genai.GenerativeModel(MODEL, system_instruction=SYSTEM_PROMPT)
         response = model.generate_content(
             prompt,
-            generation_config=GenerationConfig(
+            generation_config=genai.GenerationConfig(
                 response_mime_type="application/json",
                 response_schema=NEWS_ANALYSIS_SCHEMA,
                 temperature=0.3,
