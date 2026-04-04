@@ -58,9 +58,14 @@ gcloud artifacts repositories create news-intelligence \
   --description="News Intelligence Pipeline images" \
   --project=$PROJECT_ID 2>/dev/null || echo "  Repository already exists"
 
-# Create Cloud Build trigger (2nd gen — requires repo connection to exist)
+# Create Cloud Build trigger (delete first if exists — idempotent)
 echo ""
 echo "--- Creating Cloud Build trigger ---"
+gcloud builds triggers delete "$TRIGGER_NAME" \
+  --region="$REGION" \
+  --project="$PROJECT_ID" \
+  --quiet 2>/dev/null || true
+
 gcloud builds triggers create github \
   --name="$TRIGGER_NAME" \
   --repo-owner="$GITHUB_OWNER" \
@@ -69,12 +74,7 @@ gcloud builds triggers create github \
   --build-config="cloudbuild.yaml" \
   --region="$REGION" \
   --project="$PROJECT_ID" \
-  --description="Push to main → build + deploy all jobs" \
-  2>/dev/null || \
-gcloud builds triggers update "$TRIGGER_NAME" \
-  --build-config="cloudbuild.yaml" \
-  --region="$REGION" \
-  --project="$PROJECT_ID"
+  --description="Push to main → build + deploy all jobs"
 
 echo ""
 echo "=== Done! ==="
