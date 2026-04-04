@@ -44,6 +44,7 @@ for ROLE in \
   gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${CLOUDBUILD_SA}" \
     --role="$ROLE" \
+    --condition=None \
     --quiet
   echo "  ✓ $ROLE"
 done
