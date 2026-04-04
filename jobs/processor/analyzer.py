@@ -11,7 +11,7 @@ vertexai.init(
     location=os.environ.get("VERTEX_REGION", "europe-west1"),
 )
 
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-001")
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash")
 
 
 def format_articles_for_prompt(articles: list[dict]) -> str:
