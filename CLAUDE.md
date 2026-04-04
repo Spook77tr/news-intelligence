@@ -52,24 +52,28 @@ news-intelligence/
 https://github.com/Spook77tr/news-intelligence
 
 ## CI/CD
-- GitHub Actions → `.github/workflows/deploy.yml`
-- Push to `main` → build + deploy all jobs
-- PR to `main` → build only (no deploy)
-- Auth: Workload Identity Federation (no long-lived keys)
+- Cloud Build → `cloudbuild.yaml`
+- Trigger: push to `main` → build + deploy all 3 jobs
+- Parallel builds with layer caching (`--cache-from :latest`)
 - Registry: `europe-west1-docker.pkg.dev/bi4ward/news-intelligence`
-- Required GitHub secrets: `GCP_PROJECT_ID`, `GCP_WIF_PROVIDER`, `GCP_SA_EMAIL`
-- WIF setup: `bash infra/setup_wif.sh`
+- Logs: Cloud Logging (`CLOUD_LOGGING_ONLY`)
+- Setup: `bash infra/setup_cloudbuild.sh`
 
 ## Build & Deploy
 ```bash
 # İlk kurulum (tek seferlik)
 bash infra/setup.sh
 
-# WIF + Artifact Registry kurulumu (CI/CD için)
-export GITHUB_REPO=Spook77tr/news-intelligence
-bash infra/setup_wif.sh
+# Cloud Build + Artifact Registry kurulumu (tek seferlik)
+# Önce Console'da GitHub bağlantısı kur:
+# Cloud Build → Repositories (2nd gen) → Connect Repository → GitHub
+bash infra/setup_cloudbuild.sh
 
-# Manuel deploy (tüm joblar)
+# Manuel trigger (ihtiyaç halinde)
+gcloud builds triggers run news-intelligence-deploy \
+  --branch=main --region=europe-west1 --project=bi4ward
+
+# Lokal manuel deploy
 bash infra/deploy.sh
 
 # Tek job deploy
