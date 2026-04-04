@@ -56,17 +56,26 @@ steps:
   - name: gcr.io/cloud-builders/docker
     id: push-fetcher
     waitFor: [build-fetcher]
-    args: [push, --all-tags, ${_REGISTRY}/news-fetcher]
+    args:
+      - push
+      - --all-tags
+      - ${_REGISTRY}/news-fetcher
 
   - name: gcr.io/cloud-builders/docker
     id: push-processor
     waitFor: [build-processor]
-    args: [push, --all-tags, ${_REGISTRY}/news-processor]
+    args:
+      - push
+      - --all-tags
+      - ${_REGISTRY}/news-processor
 
   - name: gcr.io/cloud-builders/docker
     id: push-notifier
     waitFor: [build-notifier]
-    args: [push, --all-tags, ${_REGISTRY}/news-notifier]
+    args:
+      - push
+      - --all-tags
+      - ${_REGISTRY}/news-notifier
 
   # ── Deploy Cloud Run Jobs (each after its push) ────────────────────────────
 
