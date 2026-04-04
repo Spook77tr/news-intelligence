@@ -95,9 +95,9 @@ steps:
           --task-timeout=1800
           --project=${PROJECT_ID}"
         if gcloud run jobs describe news-fetcher --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
-          gcloud run jobs update news-fetcher $ARGS
+          gcloud run jobs update news-fetcher $$ARGS
         else
-          gcloud run jobs create news-fetcher $ARGS
+          gcloud run jobs create news-fetcher $$ARGS
         fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
@@ -116,9 +116,9 @@ steps:
           --task-timeout=1800
           --project=${PROJECT_ID}"
         if gcloud run jobs describe news-processor --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
-          gcloud run jobs update news-processor $ARGS
+          gcloud run jobs update news-processor $$ARGS
         else
-          gcloud run jobs create news-processor $ARGS
+          gcloud run jobs create news-processor $$ARGS
         fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
@@ -137,9 +137,9 @@ steps:
           --task-timeout=1800
           --project=${PROJECT_ID}"
         if gcloud run jobs describe news-notifier --region=${_REGION} --project=${PROJECT_ID} &>/dev/null; then
-          gcloud run jobs update news-notifier $ARGS
+          gcloud run jobs update news-notifier $$ARGS
         else
-          gcloud run jobs create news-notifier $ARGS
+          gcloud run jobs create news-notifier $$ARGS
         fi
 
 images:
