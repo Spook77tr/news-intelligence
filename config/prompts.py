@@ -178,7 +178,6 @@ NEWS_ANALYSIS_SCHEMA = {
         },
         "scenarios": {
             "type": "array",
-            "maxItems": 2,
             "items": {
                 "type": "object",
                 "required": ["condition", "outcome", "probability"],
