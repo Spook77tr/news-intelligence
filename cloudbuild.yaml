@@ -90,7 +90,7 @@ steps:
           --region=${_REGION}
           --service-account=${_SA_EMAIL}
           --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
-          --set-secrets=TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --set-secrets=GOOGLE_API_KEY=GOOGLE_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
           --memory=2Gi
           --task-timeout=1800
           --project=${PROJECT_ID}"
@@ -111,7 +111,7 @@ steps:
           --region=${_REGION}
           --service-account=${_SA_EMAIL}
           --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
-          --set-secrets=TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --set-secrets=GOOGLE_API_KEY=GOOGLE_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
           --memory=2Gi
           --task-timeout=1800
           --project=${PROJECT_ID}"
@@ -132,7 +132,7 @@ steps:
           --region=${_REGION}
           --service-account=${_SA_EMAIL}
           --set-env-vars=GCP_PROJECT_ID=${PROJECT_ID},BQ_DATASET=news_intelligence
-          --set-secrets=TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
+          --set-secrets=GOOGLE_API_KEY=GOOGLE_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest
           --memory=2Gi
           --task-timeout=1800
           --project=${PROJECT_ID}"

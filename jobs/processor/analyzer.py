@@ -2,17 +2,10 @@ import sys, json, os
 sys.path.insert(0, "/app/shared")
 sys.path.insert(0, "/app/config")
 
-import google.auth
-import google.auth.transport.requests
 import google.generativeai as genai
 from prompts import SYSTEM_PROMPT, NEWS_ANALYSIS_SCHEMA
 
-# Use ADC (service account on Cloud Run, gcloud credentials locally)
-_credentials, _ = google.auth.default(
-    scopes=["https://www.googleapis.com/auth/generative-language"]
-)
-google.auth.transport.requests.Request().refresh_with_scopes = None  # no-op guard
-genai.configure(credentials=_credentials)
+genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash-002")
 
@@ -39,10 +32,6 @@ def analyze_cluster(cluster_record: dict, articles: list[dict]) -> dict | None:
     )
 
     try:
-        # Refresh credentials before each call (token may expire in long runs)
-        auth_req = google.auth.transport.requests.Request()
-        _credentials.refresh(auth_req)
-
         model = genai.GenerativeModel(MODEL, system_instruction=SYSTEM_PROMPT)
         response = model.generate_content(
             prompt,

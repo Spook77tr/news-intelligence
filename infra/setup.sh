@@ -37,7 +37,7 @@ done
 
 # Secrets
 echo "Creating secrets (you'll need to set values)..."
-for SECRET in TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID; do
+for SECRET in GOOGLE_API_KEY TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID; do
   gcloud secrets create $SECRET --project=$PROJECT_ID 2>/dev/null || true
   echo "  → Set value: gcloud secrets versions add $SECRET --data-file=-"
 done
