@@ -104,8 +104,8 @@ NEWS_ANALYSIS_SCHEMA = {
                 "required": ["source", "base_credibility", "instance_credibility", "factors"],
                 "properties": {
                     "source": {"type": "string"},
-                    "base_credibility": {"type": "number", "minimum": 0, "maximum": 1},
-                    "instance_credibility": {"type": "number", "minimum": 0, "maximum": 1},
+                    "base_credibility": {"type": "number"},
+                    "instance_credibility": {"type": "number"},
                     "factors": {"type": "array", "items": {"type": "string"}}
                 }
             }
@@ -171,11 +171,7 @@ NEWS_ANALYSIS_SCHEMA = {
                 }
             }
         },
-        "significance_score": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-        },
+        "significance_score": {"type": "number"},
         "scenarios": {
             "type": "array",
             "items": {
