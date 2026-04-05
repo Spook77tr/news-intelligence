@@ -83,13 +83,14 @@ def get_articles_by_ids(article_ids) -> list[dict]:
     """)
 
 
-def get_todays_actionable_clusters() -> list[dict]:
-    """Notifier için: bugünün monitor + actionable analizleri."""
+def get_todays_actionable_clusters(min_score: float = 0.50) -> list[dict]:
+    """Notifier için: bugünün yüksek impact monitor + actionable analizleri."""
     return query(f"""
         SELECT a.*, c.article_ids, c.sources, c.bias_spread
         FROM `{table_ref('analyzed_news')}` a
         JOIN `{table_ref('news_clusters')}` c USING (cluster_id)
         WHERE a.analysis_date = CURRENT_DATE('Europe/Istanbul')
           AND a.signal_label IN ('monitor', 'actionable')
+          AND a.significance_score >= {min_score}
         ORDER BY a.significance_score DESC
     """)

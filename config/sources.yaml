@@ -1,33 +1,5 @@
 sources:
-  # Türkiye — Sol/Laik
-  - name: Cumhuriyet
-    url: https://www.cumhuriyet.com.tr/rss/son_dakika.xml
-    bias: TR_LEFT
-    language: tr
-    priority: 1
-
-  # Türkiye — Sağ/Hükümet yanlısı
-  - name: Sabah
-    url: https://www.sabah.com.tr/rss/anasayfa.xml
-    bias: TR_RIGHT
-    language: tr
-    priority: 1
-
-  # Türkiye — Ekonomi odaklı
-  - name: Dünya Gazetesi
-    url: https://www.dunya.com/rss
-    bias: TR_ECONOMY
-    language: tr
-    priority: 2
-
-  # Türkiye — Merkez/Liberal
-  - name: Hürriyet
-    url: https://www.hurriyet.com.tr/rss/anasayfa
-    bias: TR_CENTER
-    language: tr
-    priority: 1
-
-  # Uluslararası — Nötr/Wire
+  # ── Uluslararası Wire (en tarafsız) ─────────────────────────────────────────
   - name: Reuters
     url: https://feeds.reuters.com/reuters/topNews
     bias: INTL_NEUTRAL
@@ -40,41 +12,53 @@ sources:
     language: en
     priority: 1
 
-  # Uluslararası — Batı/Liberal
+  # ── Uluslararası — Finans & Ekonomi ─────────────────────────────────────────
+  - name: Financial Times
+    url: https://www.ft.com/rss/home
+    bias: WEST_FINANCE
+    language: en
+    priority: 1
+
+  - name: Bloomberg Markets
+    url: https://feeds.bloomberg.com/markets/news.rss
+    bias: WEST_FINANCE
+    language: en
+    priority: 1
+
+  # ── Uluslararası — Batı Liberal (güvenilir, editoryal) ───────────────────────
   - name: BBC News
     url: https://feeds.bbci.co.uk/news/world/rss.xml
     bias: WEST_LIBERAL
     language: en
     priority: 1
 
-  - name: The Guardian
-    url: https://www.theguardian.com/world/rss
-    bias: WEST_LEFT
+  - name: The Economist
+    url: https://www.economist.com/international/rss.xml
+    bias: WEST_LIBERAL
     language: en
     priority: 2
 
-  # Uluslararası — Finans
-  - name: Financial Times
-    url: https://www.ft.com/rss/home
-    bias: WEST_FINANCE
-    language: en
-    priority: 2
-
-  # Orta Doğu perspektifi
+  # ── Orta Doğu & Küresel Güney ───────────────────────────────────────────────
   - name: Al Jazeera English
     url: https://www.aljazeera.com/xml/rss/all.xml
     bias: MIDEAST
     language: en
     priority: 2
 
-  # Rus perspektifi
-  - name: RT
-    url: https://www.rt.com/rss/news/
-    bias: RU_STATE
-    language: en
-    priority: 3
+  # ── Türkiye — Ekonomi odaklı (en az partizan) ───────────────────────────────
+  - name: Dünya Gazetesi
+    url: https://www.dunya.com/rss
+    bias: TR_ECONOMY
+    language: tr
+    priority: 1
 
-  # Kripto — Bitcoin & ETH odaklı
+  - name: Hürriyet
+    url: https://www.hurriyet.com.tr/rss/anasayfa
+    bias: TR_CENTER
+    language: tr
+    priority: 2
+
+  # ── Kripto — Bitcoin & ETH odaklı ───────────────────────────────────────────
   - name: CoinDesk
     url: https://www.coindesk.com/arc/outboundfeeds/rss/
     bias: CRYPTO

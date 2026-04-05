@@ -129,9 +129,24 @@ GOOGLE_APPLICATION_CREDENTIALS=  # local dev için, Cloud Run'da SA ile otomatik
 - `actionable` → Brifing başına, highlight ile
 
 ## Haber Kaynakları (config/sources.yaml)
-Bias spread: TR Sol / TR Sağ / TR Ekonomi / Batı Nötr / Batı Liberal / Orta Doğu / Rus perspektifi / Kripto (BTC & ETH odaklı)
-- CRYPTO: CoinDesk, Cointelegraph, Decrypt (genel kripto)
-- CRYPTO_BTC: Bitcoin Magazine (Bitcoin-spesifik)
+Tarafsız/güvenilir ağırlıklı seçim. Spor haberleri fetcher'da filtrelenir.
+
+| Kaynak | Bias | Öncelik |
+|---|---|---|
+| Reuters, AP | INTL_NEUTRAL | 1 |
+| Financial Times, Bloomberg | WEST_FINANCE | 1 |
+| BBC, The Economist | WEST_LIBERAL | 1-2 |
+| Al Jazeera | MIDEAST | 2 |
+| Dünya Gazetesi | TR_ECONOMY | 1 |
+| Hürriyet | TR_CENTER | 2 |
+| CoinDesk, Cointelegraph, Decrypt | CRYPTO | 1-2 |
+| Bitcoin Magazine | CRYPTO_BTC | 2 |
+
+**Kaldırılanlar:** RT (Rus devlet propagandası), Cumhuriyet, Sabah (aşırı partizan TR)
+
+## Filtreleme
+- **Spor:** Fetcher'da başlık anahtar kelime kontrolü ile atlanır
+- **Düşük impact:** Notifier sadece significance_score ≥ 0.50 olanları gösterir
 
 ## Known Issues / TODOs
 - [ ] Embedding'ler BQ'da saklanmıyor (cost), her seferinde yeniden hesaplanıyor — kabul edilebilir şimdilik

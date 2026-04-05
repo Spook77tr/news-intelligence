@@ -11,6 +11,27 @@ import bq_client
 
 TR_TZ = ZoneInfo("Europe/Istanbul")
 
+# Spor haberleri filtresi — bu kelimeleri içeren başlıklar atlanır
+SPORTS_KEYWORDS = {
+    # TR
+    "futbol", "maç", "gol", "lig", "şampiyonluk", "transfer", "teknik direktör",
+    "süper lig", "milli takım", "basketbol", "voleybol", "tenis", "formula",
+    "olimpiyat", "dünya kupası", "şampiyonlar ligi", "fenerbahçe", "galatasaray",
+    "beşiktaş", "trabzonspor", "taraftar",
+    # EN
+    "football", "soccer", "nfl", "nba", "nhl", "mlb", "fifa", "uefa",
+    "premier league", "la liga", "bundesliga", "serie a", "champions league",
+    "world cup", "olympic", "olympics", "tournament", "championship",
+    "transfer window", "match", "goal", "striker", "midfielder", "goalkeeper",
+    "tennis", "wimbledon", "formula 1", "f1", "grand prix", "nascar",
+    "basketball", "baseball", "cricket", "rugby", "golf",
+}
+
+
+def is_sports(title: str) -> bool:
+    title_lower = title.lower()
+    return any(kw in title_lower for kw in SPORTS_KEYWORDS)
+
 
 def load_sources(path: str = "/app/config/sources.yaml") -> list[dict]:
     with open(path) as f:
@@ -31,6 +52,9 @@ def fetch_source(src: dict, max_articles: int = 20, snippet_len: int = 600) -> l
         url = entry.get("link", "")
         title = entry.get("title", "").strip()
         if not url or not title:
+            continue
+
+        if is_sports(title):
             continue
 
         row_id = hashlib.md5(f"{src['name']}{url}".encode()).hexdigest()
