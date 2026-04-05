@@ -74,6 +74,31 @@ sources:
     language: en
     priority: 3
 
+  # Kripto — Bitcoin & ETH odaklı
+  - name: CoinDesk
+    url: https://www.coindesk.com/arc/outboundfeeds/rss/
+    bias: CRYPTO
+    language: en
+    priority: 1
+
+  - name: Cointelegraph
+    url: https://cointelegraph.com/rss
+    bias: CRYPTO
+    language: en
+    priority: 1
+
+  - name: Bitcoin Magazine
+    url: https://bitcoinmagazine.com/.rss/full/
+    bias: CRYPTO_BTC
+    language: en
+    priority: 2
+
+  - name: Decrypt
+    url: https://decrypt.co/feed
+    bias: CRYPTO
+    language: en
+    priority: 2
+
 settings:
   max_articles_per_source: 20
   content_snippet_length: 600

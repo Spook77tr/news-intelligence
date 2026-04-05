@@ -129,7 +129,9 @@ GOOGLE_APPLICATION_CREDENTIALS=  # local dev için, Cloud Run'da SA ile otomatik
 - `actionable` → Brifing başına, highlight ile
 
 ## Haber Kaynakları (config/sources.yaml)
-Bias spread: TR Sol / TR Sağ / TR Ekonomi / Batı Nötr / Batı Liberal / Orta Doğu / Rus perspektifi
+Bias spread: TR Sol / TR Sağ / TR Ekonomi / Batı Nötr / Batı Liberal / Orta Doğu / Rus perspektifi / Kripto (BTC & ETH odaklı)
+- CRYPTO: CoinDesk, Cointelegraph, Decrypt (genel kripto)
+- CRYPTO_BTC: Bitcoin Magazine (Bitcoin-spesifik)
 
 ## Known Issues / TODOs
 - [ ] Embedding'ler BQ'da saklanmıyor (cost), her seferinde yeniden hesaplanıyor — kabul edilebilir şimdilik

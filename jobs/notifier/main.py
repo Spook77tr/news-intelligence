@@ -26,6 +26,8 @@ BIAS_EMOJI = {
     "WEST_FINANCE": "💰",
     "MIDEAST": "🌙",
     "RU_STATE": "🇷🇺",
+    "CRYPTO": "₿",
+    "CRYPTO_BTC": "🟠",
 }
 
 
