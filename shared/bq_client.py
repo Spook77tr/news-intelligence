@@ -50,6 +50,28 @@ def get_unprocessed_articles() -> list[dict]:
     """)
 
 
+def get_unanalyzed_clusters() -> list[dict]:
+    """Bugün cluster'a atanmış ama analiz edilmemiş kayıtlar (Gemini hatası sonrası retry için)."""
+    return query(f"""
+        SELECT c.*
+        FROM `{table_ref('news_clusters')}` c
+        LEFT JOIN `{table_ref('analyzed_news')}` a USING (cluster_id)
+        WHERE DATE(c.created_at) = CURRENT_DATE('Europe/Istanbul')
+          AND a.cluster_id IS NULL
+    """)
+
+
+def get_articles_by_ids(article_ids: list[str]) -> list[dict]:
+    """Verilen ID listesindeki haberleri getir."""
+    if not article_ids:
+        return []
+    ids_str = ", ".join(f"'{aid}'" for aid in article_ids)
+    return query(f"""
+        SELECT * FROM `{table_ref('raw_news')}`
+        WHERE id IN ({ids_str})
+    """)
+
+
 def get_todays_actionable_clusters() -> list[dict]:
     """Notifier için: bugünün monitor + actionable analizleri."""
     return query(f"""
