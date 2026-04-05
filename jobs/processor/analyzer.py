@@ -39,7 +39,7 @@ def analyze_cluster(cluster_record: dict, articles: list[dict]) -> dict | None:
                 response_mime_type="application/json",
                 response_schema=NEWS_ANALYSIS_SCHEMA,
                 temperature=0.3,
-                max_output_tokens=8192,
+                max_output_tokens=4096,
             ),
         )
         return json.loads(response.text)
