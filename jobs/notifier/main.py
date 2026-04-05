@@ -62,67 +62,39 @@ def format_cluster(cluster: dict, rank: int) -> str:
     emoji = SIGNAL_EMOJI.get(signal, "⚪")
 
     impact = safe_json(cluster.get("impact_analysis", {}))
-    temporal = safe_json(cluster.get("temporal_context", {}))
-    gaps = safe_json(cluster.get("information_gaps", {}))
     scenarios = safe_json(cluster.get("scenarios", []))
-    narratives = safe_json(cluster.get("narrative_groups", []))
 
-    sources_str = ", ".join(cluster.get("sources", []))
     bias_spread = cluster.get("bias_spread", [])
     bias_str = " ".join(BIAS_EMOJI.get(b, b) for b in bias_spread)
-
-    # Momentum
-    momentum = temporal.get("momentum", "unknown")
-    momentum_str = {"increasing": "📈", "decreasing": "📉", "stable": "➡️", "unknown": "❓"}.get(momentum, "")
 
     # TR etkisi
     tr_impact = impact.get("turkey", {})
     tr_economy = tr_impact.get("economy", "")
     tr_politics = tr_impact.get("politics", "")
 
-    # Anlatı farkı (ilk 2 grup)
-    narrative_lines = []
-    for ng in narratives[:2]:
-        label = ng.get("group_label", "")
-        emphasis = ng.get("emphasis", "")
-        narrative_lines.append(f"  • <b>{label}:</b> {emphasis[:120]}")
-
-    # Bilgi boşlukları
-    missing = gaps.get("missing_critical", [])[:2]
-    missing_str = " | ".join(missing) if missing else ""
-
     # Senaryolar
     scenario_lines = []
     for s in scenarios[:2]:
         prob = s.get("probability", "")
-        cond = s.get("condition", "")[:100]
-        out = s.get("outcome", "")[:100]
-        scenario_lines.append(f"  ↪ [{prob.upper()}] {cond} → {out}")
+        cond = s.get("condition", "")[:120]
+        out = s.get("outcome", "")[:120]
+        scenario_lines.append(f"  ↪ <i>[{prob.upper()}]</i> {cond} → {out}")
 
     lines = [
-        f"{emoji} <b>#{rank} {cluster.get('topic', '')[:80]}</b>",
-        f"Skor: {score:.2f} | {momentum_str} {momentum} | {bias_str}",
-        f"Kaynaklar: {sources_str}",
-        "",
-        f"<b>Özet:</b> {cluster.get('event_summary', '')[:300]}",
+        f"{emoji} <b>#{rank} {cluster.get('topic', '')[:80]}</b> {bias_str}",
+        f"<b>Özet:</b> {cluster.get('event_summary', '')[:350]}",
     ]
-
-    if narrative_lines:
-        lines += ["", "<b>Anlatı Farkı:</b>"] + narrative_lines
 
     tr_parts = []
     if tr_economy:
-        tr_parts.append(f"Ekonomi: {tr_economy[:150]}")
+        tr_parts.append(f"Ekonomi: {tr_economy[:200]}")
     if tr_politics:
-        tr_parts.append(f"Politika: {tr_politics[:150]}")
+        tr_parts.append(f"Politika: {tr_politics[:200]}")
     if tr_parts:
-        lines += ["", "<b>🇹🇷 TR Etkisi:</b>"] + [f"  {p}" for p in tr_parts]
-
-    if missing_str:
-        lines += ["", f"<b>⚠️ Eksik Bilgi:</b> {missing_str}"]
+        lines += ["<b>🇹🇷 TR Etkisi:</b>"] + [f"  {p}" for p in tr_parts]
 
     if scenario_lines:
-        lines += ["", "<b>📐 Senaryolar:</b>"] + scenario_lines
+        lines += ["<b>📐 Senaryolar:</b>"] + scenario_lines
 
     return "\n".join(lines)
 

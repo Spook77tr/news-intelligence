@@ -52,12 +52,6 @@ sources:
     language: tr
     priority: 1
 
-  - name: Hürriyet
-    url: https://www.hurriyet.com.tr/rss/anasayfa
-    bias: TR_CENTER
-    language: tr
-    priority: 2
-
   # ── Kripto — Bitcoin & ETH odaklı ───────────────────────────────────────────
   - name: CoinDesk
     url: https://www.coindesk.com/arc/outboundfeeds/rss/

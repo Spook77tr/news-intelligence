@@ -83,8 +83,8 @@ def get_articles_by_ids(article_ids) -> list[dict]:
     """)
 
 
-def get_todays_actionable_clusters(min_score: float = 0.50) -> list[dict]:
-    """Notifier için: bugünün yüksek impact monitor + actionable analizleri."""
+def get_todays_actionable_clusters(min_score: float = 0.50, limit: int = 10) -> list[dict]:
+    """Notifier için: bugünün yüksek impact monitor + actionable analizleri (max 10)."""
     return query(f"""
         SELECT a.*, c.article_ids, c.sources, c.bias_spread
         FROM `{table_ref('analyzed_news')}` a
@@ -93,4 +93,5 @@ def get_todays_actionable_clusters(min_score: float = 0.50) -> list[dict]:
           AND a.signal_label IN ('monitor', 'actionable')
           AND a.significance_score >= {min_score}
         ORDER BY a.significance_score DESC
+        LIMIT {limit}
     """)
