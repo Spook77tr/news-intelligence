@@ -7,7 +7,7 @@ from prompts import SYSTEM_PROMPT, NEWS_ANALYSIS_SCHEMA
 
 genai.configure(api_key=os.environ["VERTEXAI_API_KEY"])
 
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-lite")
 
 
 def format_articles_for_prompt(articles: list[dict]) -> str:
