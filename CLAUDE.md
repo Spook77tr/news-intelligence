@@ -8,7 +8,7 @@ Sabah haber brifing sistemi. Farklı kaynaklardan (bias spread ile) haber çekip
 - **Cloud Scheduler** — 05:30 TR saati trigger
 - **BigQuery** — raw_news, news_clusters, analyzed_news
 - **Vertex AI** — text-embedding-004 (clustering)
-- **Vertex AI Gemini** — haber analizi (gemini-1.5-flash-002, response_schema ile structured JSON)
+- **Google AI Gemini** — haber analizi (gemini-2.0-flash, response_schema ile structured JSON)
 - **Telegram Bot** — sabah brifing delivery
 
 ## GCP Project
