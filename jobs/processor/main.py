@@ -37,12 +37,12 @@ def analyze_and_insert(cluster_record: dict, articles: list[dict]) -> bool:
 def run():
     # 0. Daha önce cluster'a atanmış ama analiz edilmemiş kayıtları retry et
     orphaned = bq_client.get_unanalyzed_clusters()
-    if orphaned:
-        print(f"[INFO] Retrying {len(orphaned)} unanalyzed clusters from previous run...")
-        for cluster_record in orphaned:
-            articles = bq_client.get_articles_by_ids(cluster_record["article_ids"])
-            if articles:
-                analyze_and_insert(cluster_record, articles)
+    print(f"[INFO] Unanalyzed clusters from previous runs: {len(orphaned)}")
+    for cluster_record in orphaned:
+        articles = bq_client.get_articles_by_ids(cluster_record["article_ids"])
+        print(f"[INFO] Retrying cluster {cluster_record['cluster_id'][:8]}... ({len(articles)} articles fetched)")
+        if articles:
+            analyze_and_insert(cluster_record, articles)
 
     # 1. Bugün çekilmiş, henüz işlenmemiş haberleri al
     articles = bq_client.get_unprocessed_articles()
