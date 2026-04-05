@@ -141,11 +141,23 @@ def run():
     actionable = [c for c in clusters if c["signal_label"] == "actionable"]
     monitor = [c for c in clusters if c["signal_label"] == "monitor"]
 
+    # Overall summary: one-liner per cluster, ordered by score
+    summary_lines = []
+    for i, c in enumerate(actionable + monitor, 1):
+        emoji = SIGNAL_EMOJI.get(c["signal_label"], "⚪")
+        score = c.get("significance_score", 0)
+        topic = c.get("topic", "")[:80]
+        summary_lines.append(f"{emoji} {i}. [{score:.2f}] {topic}")
+
     header = (
         f"📰 <b>SABAH BRİFİNG</b>\n"
         f"{date_str}\n"
         f"━━━━━━━━━━━━━━━━━━━\n"
-        f"🔴 Actionable: {len(actionable)} | 🟡 Monitor: {len(monitor)}"
+        f"🔴 Actionable: {len(actionable)} | 🟡 Monitor: {len(monitor)}\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        + "\n".join(summary_lines) +
+        f"\n━━━━━━━━━━━━━━━━━━━\n"
+        f"⬇️ Detaylar aşağıda"
     )
     send_message(header)
 
